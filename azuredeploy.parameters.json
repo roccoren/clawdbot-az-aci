@@ -1,0 +1,13 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "_comment": "WARNING: This is a template file. Do not commit actual API keys to version control. Provide actual values during deployment.",
+  "parameters": {
+    "openAiApiKey": {
+      "value": ""
+    },
+    "anthropicApiKey": {
+      "value": ""
+    }
+  }
+}
