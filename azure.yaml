@@ -1,0 +1,11 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+
+name: clawdbot-aci
+metadata:
+  template: clawdbot-az-aci@0.0.1
+
+services:
+  clawdbot:
+    project: .
+    language: docker
+    host: containerinstance

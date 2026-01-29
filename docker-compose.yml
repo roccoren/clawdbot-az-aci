@@ -1,0 +1,25 @@
+services:
+  clawdbot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: clawdbot-local
+    ports:
+      - "18789:18789"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - CLAWDBOT_GATEWAY_TOKEN=${CLAWDBOT_GATEWAY_TOKEN}
+    restart: unless-stopped
+    volumes:
+      - clawdbot-data:/home/node/.clawdbot
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:18789/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  clawdbot-data:
+    driver: local
