@@ -27,4 +27,6 @@ resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2022-10-01' = {
 
 output id string = logAnalytics.id
 output name string = logAnalytics.name
+@description('This is a secure output that contains a secret')
+#disable-next-line outputs-should-not-contain-secrets
 output primarySharedKey string = logAnalytics.listKeys().primarySharedKey

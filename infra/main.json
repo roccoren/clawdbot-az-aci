@@ -1,0 +1,679 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.40.2.10011",
+      "templateHash": "5258096723609751584"
+    }
+  },
+  "parameters": {
+    "environmentName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "metadata": {
+        "description": "Name of the environment which is used to generate a short unique hash used in all resources."
+      }
+    },
+    "location": {
+      "type": "string",
+      "minLength": 1,
+      "metadata": {
+        "description": "Primary location for all resources"
+      }
+    },
+    "containerRegistryName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Name of the container registry"
+      }
+    },
+    "containerGroupName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Name of the container group"
+      }
+    },
+    "dnsNameLabel": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "DNS name label for the container group"
+      }
+    },
+    "containerCpu": {
+      "type": "int",
+      "defaultValue": 1,
+      "metadata": {
+        "description": "CPU cores for the container"
+      }
+    },
+    "containerMemory": {
+      "type": "int",
+      "defaultValue": 2,
+      "metadata": {
+        "description": "Memory in GB for the container"
+      }
+    },
+    "openAiApiKey": {
+      "type": "securestring",
+      "defaultValue": "",
+      "metadata": {
+        "description": "OpenAI API Key (optional)"
+      }
+    },
+    "anthropicApiKey": {
+      "type": "securestring",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Anthropic API Key (optional)"
+      }
+    },
+    "clawdbotGatewayToken": {
+      "type": "securestring",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Clawdbot Gateway Token"
+      }
+    }
+  },
+  "variables": {
+    "$fxv#0": {
+      "analysisServicesServers": "as-",
+      "apiManagementService": "apim-",
+      "appConfigurationStores": "appcs-",
+      "appManagedEnvironments": "cae-",
+      "appContainerApps": "ca-",
+      "authorizationPolicyDefinitions": "policy-",
+      "automationAutomationAccounts": "aa-",
+      "blueprintBlueprints": "bp-",
+      "blueprintBlueprintsArtifacts": "bpa-",
+      "cacheRedis": "redis-",
+      "cdnProfiles": "cdnp-",
+      "cdnProfilesEndpoints": "cdne-",
+      "cognitiveServicesAccounts": "cog-",
+      "cognitiveServicesFormRecognizer": "cog-fr-",
+      "cognitiveServicesTextAnalytics": "cog-ta-",
+      "computeAvailabilitySets": "avail-",
+      "computeCloudServices": "cld-",
+      "computeDiskEncryptionSets": "des-",
+      "computeDisks": "disk-",
+      "computeDisksOs": "osdisk-",
+      "computeGalleries": "gal-",
+      "computeSnapshots": "snap-",
+      "computeVirtualMachines": "vm-",
+      "computeVirtualMachineScaleSets": "vmss-",
+      "containerInstanceContainerGroups": "ci-",
+      "containerRegistryRegistries": "cr",
+      "containerServiceManagedClusters": "aks-",
+      "databricksWorkspaces": "dbw-",
+      "dataFactoryFactories": "adf-",
+      "dataLakeAnalyticsAccounts": "dla-",
+      "dataLakeStoreAccounts": "dls-",
+      "dataMigrationServices": "dms-",
+      "dBforMySQLServers": "mysql-",
+      "dBforPostgreSQLServers": "psql-",
+      "devicesIotHubs": "iot-",
+      "devicesProvisioningServices": "provs-",
+      "devicesProvisioningServicesCertificates": "pcert-",
+      "documentDBDatabaseAccounts": "cosmos-",
+      "eventGridDomains": "evgd-",
+      "eventGridTopics": "evgt-",
+      "eventHubNamespaces": "evhns-",
+      "eventHubNamespacesEventHubs": "evh-",
+      "HDInsightClustersHadoop": "hadoop-",
+      "HDInsightClustersHbase": "hbase-",
+      "HDInsightClustersKafka": "kafka-",
+      "HDInsightClustersMl": "mls-",
+      "HDInsightClustersSpark": "spark-",
+      "HDInsightClustersStorm": "storm-",
+      "hybridComputeMachines": "arcs-",
+      "insightsActionGroups": "ag-",
+      "insightsComponents": "appi-",
+      "keyVaultVaults": "kv-",
+      "kubernetesConnectedClusters": "arck-",
+      "kustoClusters": "dec-",
+      "kustoClustersDatabases": "dedb-",
+      "loadTesting": "lt-",
+      "logicIntegrationAccounts": "ia-",
+      "logicWorkflows": "logic-",
+      "machineLearningServicesWorkspaces": "mlw-",
+      "managedIdentityUserAssignedIdentities": "id-",
+      "managementManagementGroups": "mg-",
+      "migrateAssessmentProjects": "migr-",
+      "networkApplicationGateways": "agw-",
+      "networkApplicationSecurityGroups": "asg-",
+      "networkAzureFirewalls": "afw-",
+      "networkBastionHosts": "bas-",
+      "networkConnections": "con-",
+      "networkDnsZones": "dnsz-",
+      "networkExpressRouteCircuits": "erc-",
+      "networkFirewallPolicies": "afwp-",
+      "networkFirewallPoliciesWebApplication": "waf-",
+      "networkFirewallPoliciesRuleGroups": "wafrg-",
+      "networkFrontDoors": "fd-",
+      "networkFrontdoorWebApplicationFirewallPolicies": "fdfp-",
+      "networkLoadBalancersExternal": "lbe-",
+      "networkLoadBalancersInternal": "lbi-",
+      "networkLoadBalancersInboundNatRules": "rule-",
+      "networkLocalNetworkGateways": "lgw-",
+      "networkNatGateways": "ng-",
+      "networkNetworkInterfaces": "nic-",
+      "networkNetworkSecurityGroups": "nsg-",
+      "networkNetworkSecurityGroupsSecurityRules": "nsgsr-",
+      "networkNetworkWatchers": "nw-",
+      "networkPrivateDnsZones": "pdnsz-",
+      "networkPrivateLinkServices": "pl-",
+      "networkPublicIPAddresses": "pip-",
+      "networkPublicIPPrefixes": "ippre-",
+      "networkRouteFilters": "rf-",
+      "networkRouteTables": "rt-",
+      "networkRouteTablesRoutes": "udr-",
+      "networkTrafficManagerProfiles": "traf-",
+      "networkVirtualNetworkGateways": "vgw-",
+      "networkVirtualNetworks": "vnet-",
+      "networkVirtualNetworksSubnets": "snet-",
+      "networkVirtualNetworksVirtualNetworkPeerings": "peer-",
+      "networkVirtualWans": "vwan-",
+      "networkVpnGateways": "vpng-",
+      "networkVpnGatewaysVpnConnections": "vcn-",
+      "networkVpnGatewaysVpnSites": "vst-",
+      "notificationHubsNamespaces": "ntfns-",
+      "notificationHubsNamespacesNotificationHubs": "ntf-",
+      "operationalInsightsWorkspaces": "log-",
+      "operationsManagementSolutions": "sol-",
+      "portalDashboards": "dash-",
+      "powerBIDedicatedCapacities": "pbi-",
+      "purviewAccounts": "pview-",
+      "recoveryServicesVaults": "rsv-",
+      "resourcesResourceGroups": "rg-",
+      "searchSearchServices": "srch-",
+      "serviceBusNamespaces": "sb-",
+      "serviceBusNamespacesQueues": "sbq-",
+      "serviceBusNamespacesTopics": "sbt-",
+      "serviceEndPointPolicies": "se-",
+      "serviceFabricClusters": "sf-",
+      "signalRServiceSignalR": "sigr-",
+      "sqlManagedInstances": "sqlmi-",
+      "sqlServers": "sql-",
+      "sqlServersDataWarehouse": "sqldw-",
+      "sqlServersDatabases": "sqldb-",
+      "sqlServersDatabasesStretch": "sqlstrdb-",
+      "storageStorageAccounts": "st",
+      "storageStorageAccountsVm": "stvm",
+      "storSimpleManagers": "ssimp-",
+      "streamAnalyticsCluster": "asa-",
+      "synapseWorkspaces": "syn-",
+      "synapseWorkspacesAnalyticsWorkspaces": "synw-",
+      "synapseWorkspacesSqlPoolsDedicated": "syndp-",
+      "synapseWorkspacesSqlPoolsSpark": "synsp-",
+      "timeSeriesInsightsEnvironments": "tsi-",
+      "webServerFarms": "plan-",
+      "webSitesAppService": "app-",
+      "webSitesAppServiceEnvironment": "ase-",
+      "webSitesFunctions": "func-",
+      "webStaticSites": "stapp-"
+    },
+    "abbrs": "[variables('$fxv#0')]",
+    "resourceToken": "[toLower(uniqueString(subscription().id, parameters('environmentName'), parameters('location')))]",
+    "tags": {
+      "azd-env-name": "[parameters('environmentName')]"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/resourceGroups",
+      "apiVersion": "2021-04-01",
+      "name": "[format('{0}{1}', variables('abbrs').resourcesResourceGroups, parameters('environmentName'))]",
+      "location": "[parameters('location')]",
+      "tags": "[variables('tags')]"
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2025-04-01",
+      "name": "container-registry",
+      "resourceGroup": "[format('{0}{1}', variables('abbrs').resourcesResourceGroups, parameters('environmentName'))]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "name": "[if(not(empty(parameters('containerRegistryName'))), createObject('value', parameters('containerRegistryName')), createObject('value', format('{0}{1}', variables('abbrs').containerRegistryRegistries, variables('resourceToken'))))]",
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "tags": {
+            "value": "[variables('tags')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.40.2.10011",
+              "templateHash": "5744336522835019675"
+            }
+          },
+          "parameters": {
+            "name": {
+              "type": "string"
+            },
+            "location": {
+              "type": "string",
+              "defaultValue": "[resourceGroup().location]"
+            },
+            "tags": {
+              "type": "object",
+              "defaultValue": {}
+            },
+            "adminUserEnabled": {
+              "type": "bool",
+              "defaultValue": true,
+              "metadata": {
+                "description": "Indicates whether admin user is enabled"
+              }
+            },
+            "sku": {
+              "type": "string",
+              "defaultValue": "Basic",
+              "allowedValues": [
+                "Basic",
+                "Standard",
+                "Premium"
+              ]
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.ContainerRegistry/registries",
+              "apiVersion": "2023-01-01-preview",
+              "name": "[parameters('name')]",
+              "location": "[parameters('location')]",
+              "tags": "[parameters('tags')]",
+              "sku": {
+                "name": "[parameters('sku')]"
+              },
+              "properties": {
+                "adminUserEnabled": "[parameters('adminUserEnabled')]"
+              }
+            }
+          ],
+          "outputs": {
+            "id": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.ContainerRegistry/registries', parameters('name'))]"
+            },
+            "name": {
+              "type": "string",
+              "value": "[parameters('name')]"
+            },
+            "loginServer": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.ContainerRegistry/registries', parameters('name')), '2023-01-01-preview').loginServer]"
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[subscriptionResourceId('Microsoft.Resources/resourceGroups', format('{0}{1}', variables('abbrs').resourcesResourceGroups, parameters('environmentName')))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2025-04-01",
+      "name": "loganalytics",
+      "resourceGroup": "[format('{0}{1}', variables('abbrs').resourcesResourceGroups, parameters('environmentName'))]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "name": {
+            "value": "[format('{0}{1}', variables('abbrs').operationalInsightsWorkspaces, variables('resourceToken'))]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "tags": {
+            "value": "[variables('tags')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.40.2.10011",
+              "templateHash": "970930732771728182"
+            }
+          },
+          "parameters": {
+            "name": {
+              "type": "string"
+            },
+            "location": {
+              "type": "string",
+              "defaultValue": "[resourceGroup().location]"
+            },
+            "tags": {
+              "type": "object",
+              "defaultValue": {}
+            },
+            "retentionInDays": {
+              "type": "int",
+              "defaultValue": 30,
+              "metadata": {
+                "description": "Number of days to retain data"
+              }
+            },
+            "sku": {
+              "type": "string",
+              "defaultValue": "PerGB2018",
+              "allowedValues": [
+                "Free",
+                "Standalone",
+                "PerNode",
+                "PerGB2018"
+              ]
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.OperationalInsights/workspaces",
+              "apiVersion": "2022-10-01",
+              "name": "[parameters('name')]",
+              "location": "[parameters('location')]",
+              "tags": "[parameters('tags')]",
+              "properties": {
+                "retentionInDays": "[parameters('retentionInDays')]",
+                "sku": {
+                  "name": "[parameters('sku')]"
+                }
+              }
+            }
+          ],
+          "outputs": {
+            "id": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('name'))]"
+            },
+            "name": {
+              "type": "string",
+              "value": "[parameters('name')]"
+            },
+            "primarySharedKey": {
+              "type": "string",
+              "metadata": {
+                "description": "This is a secure output that contains a secret"
+              },
+              "value": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces', parameters('name')), '2022-10-01').primarySharedKey]"
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[subscriptionResourceId('Microsoft.Resources/resourceGroups', format('{0}{1}', variables('abbrs').resourcesResourceGroups, parameters('environmentName')))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2025-04-01",
+      "name": "container-instance",
+      "resourceGroup": "[format('{0}{1}', variables('abbrs').resourcesResourceGroups, parameters('environmentName'))]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "name": "[if(not(empty(parameters('containerGroupName'))), createObject('value', parameters('containerGroupName')), createObject('value', format('{0}{1}', variables('abbrs').containerInstanceContainerGroups, variables('resourceToken'))))]",
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "tags": {
+            "value": "[variables('tags')]"
+          },
+          "containerRegistryName": {
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}{1}', variables('abbrs').resourcesResourceGroups, parameters('environmentName'))), 'Microsoft.Resources/deployments', 'container-registry'), '2025-04-01').outputs.name.value]"
+          },
+          "containerImage": {
+            "value": "clawdbot:latest"
+          },
+          "dnsNameLabel": "[if(not(empty(parameters('dnsNameLabel'))), createObject('value', parameters('dnsNameLabel')), createObject('value', format('clawdbot-{0}', variables('resourceToken'))))]",
+          "cpu": {
+            "value": "[parameters('containerCpu')]"
+          },
+          "memoryInGb": {
+            "value": "[parameters('containerMemory')]"
+          },
+          "port": {
+            "value": 18789
+          },
+          "environmentVariables": {
+            "value": [
+              {
+                "name": "OPENAI_API_KEY",
+                "secureValue": "[parameters('openAiApiKey')]"
+              },
+              {
+                "name": "ANTHROPIC_API_KEY",
+                "secureValue": "[parameters('anthropicApiKey')]"
+              },
+              {
+                "name": "CLAWDBOT_GATEWAY_TOKEN",
+                "secureValue": "[parameters('clawdbotGatewayToken')]"
+              }
+            ]
+          },
+          "logAnalyticsWorkspaceId": {
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}{1}', variables('abbrs').resourcesResourceGroups, parameters('environmentName'))), 'Microsoft.Resources/deployments', 'loganalytics'), '2025-04-01').outputs.id.value]"
+          },
+          "logAnalyticsWorkspaceKey": {
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}{1}', variables('abbrs').resourcesResourceGroups, parameters('environmentName'))), 'Microsoft.Resources/deployments', 'loganalytics'), '2025-04-01').outputs.primarySharedKey.value]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.40.2.10011",
+              "templateHash": "15658430199189077303"
+            }
+          },
+          "parameters": {
+            "name": {
+              "type": "string"
+            },
+            "location": {
+              "type": "string",
+              "defaultValue": "[resourceGroup().location]"
+            },
+            "tags": {
+              "type": "object",
+              "defaultValue": {}
+            },
+            "containerImage": {
+              "type": "string",
+              "metadata": {
+                "description": "Container image to deploy"
+              }
+            },
+            "containerRegistryName": {
+              "type": "string",
+              "metadata": {
+                "description": "Container registry name"
+              }
+            },
+            "dnsNameLabel": {
+              "type": "string",
+              "metadata": {
+                "description": "DNS name label for the container group"
+              }
+            },
+            "cpu": {
+              "type": "int",
+              "defaultValue": 1,
+              "metadata": {
+                "description": "CPU cores"
+              }
+            },
+            "memoryInGb": {
+              "type": "int",
+              "defaultValue": 2,
+              "metadata": {
+                "description": "Memory in GB"
+              }
+            },
+            "port": {
+              "type": "int",
+              "defaultValue": 80,
+              "metadata": {
+                "description": "Port to expose"
+              }
+            },
+            "environmentVariables": {
+              "type": "array",
+              "defaultValue": [],
+              "metadata": {
+                "description": "Environment variables for the container"
+              }
+            },
+            "logAnalyticsWorkspaceId": {
+              "type": "string",
+              "metadata": {
+                "description": "Log Analytics workspace ID"
+              }
+            },
+            "logAnalyticsWorkspaceKey": {
+              "type": "securestring",
+              "metadata": {
+                "description": "Log Analytics workspace key"
+              }
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.ContainerInstance/containerGroups",
+              "apiVersion": "2023-05-01",
+              "name": "[parameters('name')]",
+              "location": "[parameters('location')]",
+              "tags": "[parameters('tags')]",
+              "properties": {
+                "containers": [
+                  {
+                    "name": "clawdbot",
+                    "properties": {
+                      "image": "[format('{0}/{1}', reference(resourceId('Microsoft.ContainerRegistry/registries', parameters('containerRegistryName')), '2023-01-01-preview').loginServer, parameters('containerImage'))]",
+                      "ports": [
+                        {
+                          "port": "[parameters('port')]",
+                          "protocol": "TCP"
+                        }
+                      ],
+                      "environmentVariables": "[parameters('environmentVariables')]",
+                      "resources": {
+                        "requests": {
+                          "cpu": "[parameters('cpu')]",
+                          "memoryInGB": "[parameters('memoryInGb')]"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "osType": "Linux",
+                "restartPolicy": "Always",
+                "ipAddress": {
+                  "type": "Public",
+                  "ports": [
+                    {
+                      "port": "[parameters('port')]",
+                      "protocol": "TCP"
+                    }
+                  ],
+                  "dnsNameLabel": "[parameters('dnsNameLabel')]"
+                },
+                "imageRegistryCredentials": [
+                  {
+                    "server": "[reference(resourceId('Microsoft.ContainerRegistry/registries', parameters('containerRegistryName')), '2023-01-01-preview').loginServer]",
+                    "username": "[listCredentials(resourceId('Microsoft.ContainerRegistry/registries', parameters('containerRegistryName')), '2023-01-01-preview').username]",
+                    "password": "[listCredentials(resourceId('Microsoft.ContainerRegistry/registries', parameters('containerRegistryName')), '2023-01-01-preview').passwords[0].value]"
+                  }
+                ],
+                "diagnostics": {
+                  "logAnalytics": {
+                    "workspaceId": "[parameters('logAnalyticsWorkspaceId')]",
+                    "workspaceKey": "[parameters('logAnalyticsWorkspaceKey')]"
+                  }
+                }
+              }
+            }
+          ],
+          "outputs": {
+            "id": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.ContainerInstance/containerGroups', parameters('name'))]"
+            },
+            "name": {
+              "type": "string",
+              "value": "[parameters('name')]"
+            },
+            "fqdn": {
+              "type": "string",
+              "value": "[format('http://{0}:{1}', reference(resourceId('Microsoft.ContainerInstance/containerGroups', parameters('name')), '2023-05-01').ipAddress.fqdn, parameters('port'))]"
+            },
+            "ipAddress": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.ContainerInstance/containerGroups', parameters('name')), '2023-05-01').ipAddress.ip]"
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}{1}', variables('abbrs').resourcesResourceGroups, parameters('environmentName'))), 'Microsoft.Resources/deployments', 'container-registry')]",
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}{1}', variables('abbrs').resourcesResourceGroups, parameters('environmentName'))), 'Microsoft.Resources/deployments', 'loganalytics')]",
+        "[subscriptionResourceId('Microsoft.Resources/resourceGroups', format('{0}{1}', variables('abbrs').resourcesResourceGroups, parameters('environmentName')))]"
+      ]
+    }
+  ],
+  "outputs": {
+    "AZURE_LOCATION": {
+      "type": "string",
+      "value": "[parameters('location')]"
+    },
+    "AZURE_TENANT_ID": {
+      "type": "string",
+      "value": "[tenant().tenantId]"
+    },
+    "AZURE_RESOURCE_GROUP": {
+      "type": "string",
+      "value": "[format('{0}{1}', variables('abbrs').resourcesResourceGroups, parameters('environmentName'))]"
+    },
+    "AZURE_CONTAINER_REGISTRY_ENDPOINT": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}{1}', variables('abbrs').resourcesResourceGroups, parameters('environmentName'))), 'Microsoft.Resources/deployments', 'container-registry'), '2025-04-01').outputs.loginServer.value]"
+    },
+    "AZURE_CONTAINER_REGISTRY_NAME": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}{1}', variables('abbrs').resourcesResourceGroups, parameters('environmentName'))), 'Microsoft.Resources/deployments', 'container-registry'), '2025-04-01').outputs.name.value]"
+    },
+    "CLAWDBOT_URL": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}{1}', variables('abbrs').resourcesResourceGroups, parameters('environmentName'))), 'Microsoft.Resources/deployments', 'container-instance'), '2025-04-01').outputs.fqdn.value]"
+    },
+    "CLAWDBOT_IP": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}{1}', variables('abbrs').resourcesResourceGroups, parameters('environmentName'))), 'Microsoft.Resources/deployments', 'container-instance'), '2025-04-01').outputs.ipAddress.value]"
+    }
+  }
+}

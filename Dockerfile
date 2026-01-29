@@ -7,14 +7,14 @@ RUN apt-get update && apt-get install -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Create app directory
-WORKDIR /app
-
 # Install clawdbot globally
 RUN npm install -g clawdbot
 
 # Create directories for persistent data
 RUN mkdir -p /home/node/.clawdbot
+
+# Set working directory to node user home
+WORKDIR /home/node
 
 # Set environment variables
 ENV NODE_ENV=production

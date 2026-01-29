@@ -40,14 +40,25 @@ fi
 
 # Load environment variables
 if [ -f ".env" ]; then
-    export $(cat .env | grep -v '^#' | xargs)
+    set -a
+    source .env
+    set +a
 fi
 
 # Generate gateway token if not set
 if [ -z "$CLAWDBOT_GATEWAY_TOKEN" ]; then
     echo -e "${YELLOW}Generating Clawdbot gateway token...${NC}"
     GATEWAY_TOKEN=$(openssl rand -hex 32)
-    echo "CLAWDBOT_GATEWAY_TOKEN=$GATEWAY_TOKEN" >> .env
+    
+    # Update or append the token in .env file
+    if grep -q "^CLAWDBOT_GATEWAY_TOKEN=" .env 2>/dev/null; then
+        # Update existing line
+        sed -i "s/^CLAWDBOT_GATEWAY_TOKEN=.*/CLAWDBOT_GATEWAY_TOKEN=$GATEWAY_TOKEN/" .env
+    else
+        # Append new line
+        echo "CLAWDBOT_GATEWAY_TOKEN=$GATEWAY_TOKEN" >> .env
+    fi
+    
     export CLAWDBOT_GATEWAY_TOKEN=$GATEWAY_TOKEN
     echo -e "${GREEN}Gateway token generated and saved to .env${NC}"
 fi
@@ -82,7 +93,9 @@ CLAWDBOT_URL=$(echo "$OUTPUTS" | grep CLAWDBOT_URL | cut -d'=' -f2 | tr -d '"')
 if [ -n "$CLAWDBOT_URL" ]; then
     echo ""
     echo -e "${GREEN}Clawdbot is now running at: ${CLAWDBOT_URL}${NC}"
-    echo -e "${GREEN}Gateway Token: ${CLAWDBOT_GATEWAY_TOKEN}${NC}"
+    echo ""
+    echo -e "${YELLOW}⚠️  SECURITY NOTICE: Keep these credentials secure!${NC}"
+    echo -e "${YELLOW}Gateway Token (save this securely): ${CLAWDBOT_GATEWAY_TOKEN}${NC}"
     echo ""
     echo -e "${YELLOW}To access the web interface:${NC}"
     echo -e "1. Open ${CLAWDBOT_URL} in your browser"

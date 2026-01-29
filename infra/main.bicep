@@ -9,8 +9,8 @@ param environmentName string
 @description('Primary location for all resources')
 param location string
 
-@description('Id of the user or app to assign application roles')
-param principalId string = ''
+// @description('Id of the user or app to assign application roles')
+// param principalId string = ''
 
 // Optional parameters for customization
 @description('Name of the container registry')
@@ -29,6 +29,8 @@ param containerCpu int = 1
 param containerMemory int = 2
 
 // Environment variables for clawdbot
+// Note: At least one AI provider API key is required for clawdbot to function
+// Empty values will be passed as empty environment variables - ensure clawdbot can handle this
 @secure()
 @description('OpenAI API Key (optional)')
 param openAiApiKey string = ''
