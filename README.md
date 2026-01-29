@@ -1,5 +1,7 @@
 # Clawdbot Azure Container Instance Deployment
 
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Froccoren%2Fclawdbot-az-aci%2Fmain%2Fazuredeploy.json)
+
 Deploy [Clawdbot](https://github.com/clawdbot/clawdbot) on Azure Container Instances (ACI) using Azure Developer CLI (azd).
 
 ## Overview
@@ -10,6 +12,8 @@ This repository provides an automated deployment solution for running Clawdbot, 
 - **Azure Container Registry** - Stores the Docker image
 - **Log Analytics Workspace** - Monitors container logs and metrics
 - **Automated deployment scripts** - Simplified deployment using Azure Developer CLI
+- **GitHub Actions workflow** - Automated Docker image building and publishing
+- **One-click Deploy to Azure** - Deploy directly from the Azure Portal
 
 ## Prerequisites
 
@@ -23,6 +27,24 @@ Before deploying, ensure you have:
    - [Anthropic API Key](https://console.anthropic.com/)
 
 ## Quick Start
+
+### Option 1: Deploy to Azure (One-Click)
+
+Click the "Deploy to Azure" button above to deploy Clawdbot directly from the Azure Portal. This will:
+
+1. Open the Azure Portal deployment page
+2. Prompt you to enter your API keys (at least one required: OpenAI or Anthropic)
+3. Create all necessary Azure resources:
+   - Azure Container Instance (running Clawdbot)
+   - Azure Container Registry
+   - Log Analytics Workspace for monitoring
+4. Deploy and start Clawdbot automatically
+
+**Note**: The one-click deployment uses the pre-built Clawdbot image from GitHub Container Registry. A gateway token will be auto-generated for security.
+
+### Option 2: Deploy via Azure Developer CLI
+
+For more control and local development, use the Azure Developer CLI method:
 
 ### 1. Clone the Repository
 
