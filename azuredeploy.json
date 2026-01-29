@@ -32,7 +32,7 @@
     },
     "containerImage": {
       "type": "string",
-      "defaultValue": "ghcr.io/clawdbot/clawdbot:latest",
+      "defaultValue": "ghcr.io/roccoren/clawdbot-az-aci:latest",
       "metadata": {
         "description": "Container image to deploy"
       }
