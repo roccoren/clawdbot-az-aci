@@ -23,13 +23,6 @@
         "description": "DNS name label for the container group"
       }
     },
-    "containerRegistryName": {
-      "type": "string",
-      "defaultValue": "[concat('acr', uniqueString(resourceGroup().id))]",
-      "metadata": {
-        "description": "Name of the container registry"
-      }
-    },
     "containerImage": {
       "type": "string",
       "defaultValue": "ghcr.io/roccoren/clawdbot-az-aci:latest",
@@ -86,9 +79,27 @@
     }
   },
   "variables": {
-    "containerPort": 18789
+    "containerPort": 18789,
+    "hasOpenAiKey": "[not(equals(parameters('openAiApiKey'), ''))]",
+    "hasAnthropicKey": "[not(equals(parameters('anthropicApiKey'), ''))]",
+    "hasAtLeastOneApiKey": "[or(variables('hasOpenAiKey'), variables('hasAnthropicKey'))]"
   },
   "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2021-04-01",
+      "name": "validate-api-keys",
+      "properties": {
+        "mode": "Incremental",
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "resources": []
+        }
+      },
+      "condition": "[not(variables('hasAtLeastOneApiKey'))]",
+      "dependsOn": []
+    },
     {
       "type": "Microsoft.OperationalInsights/workspaces",
       "apiVersion": "2022-10-01",
@@ -99,18 +110,6 @@
           "name": "PerGB2018"
         },
         "retentionInDays": 30
-      }
-    },
-    {
-      "type": "Microsoft.ContainerRegistry/registries",
-      "apiVersion": "2023-01-01-preview",
-      "name": "[parameters('containerRegistryName')]",
-      "location": "[parameters('location')]",
-      "sku": {
-        "name": "Basic"
-      },
-      "properties": {
-        "adminUserEnabled": false
       }
     },
     {
@@ -198,9 +197,9 @@
       "type": "string",
       "value": "[reference(resourceId('Microsoft.ContainerInstance/containerGroups', parameters('containerGroupName'))).ipAddress.fqdn]"
     },
-    "gatewayToken": {
+    "instructionsToGetGatewayToken": {
       "type": "string",
-      "value": "[parameters('clawdbotGatewayToken')]"
+      "value": "To retrieve your gateway token securely, use: az containerinstance show --resource-group <your-rg> --name <container-name> --query 'containers[0].environmentVariables[?name==`CLAWDBOT_GATEWAY_TOKEN`].value' -o tsv"
     }
   }
 }

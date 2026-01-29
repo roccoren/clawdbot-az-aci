@@ -36,7 +36,6 @@ Click the "Deploy to Azure" button above to deploy Clawdbot directly from the Az
 2. Prompt you to enter your API keys (at least one required: OpenAI or Anthropic)
 3. Create all necessary Azure resources:
    - Azure Container Instance (running Clawdbot)
-   - Azure Container Registry
    - Log Analytics Workspace for monitoring
 4. Deploy and start Clawdbot automatically
 

@@ -1,14 +1,16 @@
 name: Build and Push Docker Image
 
+# This workflow builds the Docker image and pushes to GitHub Container Registry
+# Note: Consider periodically cleaning up old images from GHCR to manage storage costs
+# Images can be deleted manually via GitHub Packages UI or using GitHub API
+
 on:
   push:
     branches:
       - main
-      - master
   pull_request:
     branches:
       - main
-      - master
   workflow_dispatch:
 
 permissions:
