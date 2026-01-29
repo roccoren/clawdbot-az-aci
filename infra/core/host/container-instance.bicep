@@ -5,6 +5,9 @@ param tags object = {}
 @description('Container image to deploy')
 param containerImage string
 
+@description('Container image is provided as a fully qualified reference')
+param imageIsFullPath bool = false
+
 @description('Container registry name')
 param containerRegistryName string
 
@@ -44,7 +47,7 @@ resource containerGroup 'Microsoft.ContainerInstance/containerGroups@2023-05-01'
       {
         name: 'clawdbot'
         properties: {
-          image: '${containerRegistry.properties.loginServer}/${containerImage}'
+          image: imageIsFullPath ? containerImage : '${containerRegistry.properties.loginServer}/${containerImage}'
           ports: [
             {
               port: port
@@ -73,7 +76,7 @@ resource containerGroup 'Microsoft.ContainerInstance/containerGroups@2023-05-01'
       ]
       dnsNameLabel: dnsNameLabel
     }
-    imageRegistryCredentials: [
+    imageRegistryCredentials: imageIsFullPath ? [] : [
       {
         server: containerRegistry.properties.loginServer
         username: containerRegistry.listCredentials().username
