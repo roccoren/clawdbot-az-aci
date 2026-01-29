@@ -9,7 +9,6 @@ Deploy [Clawdbot](https://github.com/clawdbot/clawdbot) on Azure Container Insta
 This repository provides an automated deployment solution for running Clawdbot, an open-source AI assistant, on Azure Container Instances. The deployment includes:
 
 - **Azure Container Instance** - Hosts the Clawdbot container
-- **Azure Container Registry** - Stores the Docker image
 - **Log Analytics Workspace** - Monitors container logs and metrics
 - **Automated deployment scripts** - Simplified deployment using Azure Developer CLI
 - **GitHub Actions workflow** - Automated Docker image building and publishing
@@ -39,7 +38,7 @@ Click the "Deploy to Azure" button above to deploy Clawdbot directly from the Az
    - Log Analytics Workspace for monitoring
 4. Deploy and start Clawdbot automatically
 
-**Note**: The one-click deployment uses the pre-built Clawdbot image from GitHub Container Registry. A gateway token will be auto-generated for security.
+**Note**: The one-click deployment uses the pre-built Clawdbot image from GitHub Container Registry. A gateway token will be auto-generated for security. **Important**: After deployment completes, copy the gateway token from the deployment outputs - you'll need it to access Clawdbot.
 
 ### Option 2: Deploy via Azure Developer CLI
 

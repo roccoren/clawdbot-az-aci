@@ -79,27 +79,9 @@
     }
   },
   "variables": {
-    "containerPort": 18789,
-    "hasOpenAiKey": "[not(equals(parameters('openAiApiKey'), ''))]",
-    "hasAnthropicKey": "[not(equals(parameters('anthropicApiKey'), ''))]",
-    "hasAtLeastOneApiKey": "[or(variables('hasOpenAiKey'), variables('hasAnthropicKey'))]"
+    "containerPort": 18789
   },
   "resources": [
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2021-04-01",
-      "name": "validate-api-keys",
-      "properties": {
-        "mode": "Incremental",
-        "template": {
-          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-          "contentVersion": "1.0.0.0",
-          "resources": []
-        }
-      },
-      "condition": "[not(variables('hasAtLeastOneApiKey'))]",
-      "dependsOn": []
-    },
     {
       "type": "Microsoft.OperationalInsights/workspaces",
       "apiVersion": "2022-10-01",
@@ -197,9 +179,12 @@
       "type": "string",
       "value": "[reference(resourceId('Microsoft.ContainerInstance/containerGroups', parameters('containerGroupName'))).ipAddress.fqdn]"
     },
-    "instructionsToGetGatewayToken": {
+    "gatewayToken": {
       "type": "string",
-      "value": "To retrieve your gateway token securely, use: az containerinstance show --resource-group <your-rg> --name <container-name> --query 'containers[0].environmentVariables[?name==`CLAWDBOT_GATEWAY_TOKEN`].value' -o tsv"
+      "value": "[parameters('clawdbotGatewayToken')]",
+      "metadata": {
+        "description": "IMPORTANT: Save this gateway token securely. You will need it to access Clawdbot."
+      }
     }
   }
 }
