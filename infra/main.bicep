@@ -85,7 +85,8 @@ module containerInstance './core/host/container-instance.bicep' = {
     location: location
     tags: tags
     containerRegistryName: containerRegistry.outputs.name
-    containerImage: 'clawdbot:latest'
+    containerImage: '${containerRegistry.outputs.loginServer}/clawdbot:latest'
+    imageIsFullPath: true
     dnsNameLabel: !empty(dnsNameLabel) ? dnsNameLabel : 'clawdbot-${resourceToken}'
     cpu: containerCpu
     memoryInGb: containerMemory

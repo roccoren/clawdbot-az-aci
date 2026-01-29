@@ -30,6 +30,27 @@
         "description": "Container image to deploy"
       }
     },
+    "registryServer": {
+      "type": "string",
+      "defaultValue": "ghcr.io",
+      "metadata": {
+        "description": "Container registry server (used when registry credentials are provided)"
+      }
+    },
+    "registryUsername": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Container registry username (optional for public images)"
+      }
+    },
+    "registryPassword": {
+      "type": "securestring",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Container registry password or token (optional for public images)"
+      }
+    },
     "containerCpu": {
       "type": "int",
       "defaultValue": 1,
@@ -79,7 +100,8 @@
     }
   },
   "variables": {
-    "containerPort": 18789
+    "containerPort": 18789,
+    "imageRegistryCredentials": "[if(and(not(empty(parameters('registryUsername'))), not(empty(parameters('registryPassword')))), createArray(createObject('server', parameters('registryServer'), 'username', parameters('registryUsername'), 'password', parameters('registryPassword'))), json('[]'))]"
   },
   "resources": [
     {
@@ -153,6 +175,7 @@
             }
           ]
         },
+        "imageRegistryCredentials": "[variables('imageRegistryCredentials')]",
         "diagnostics": {
           "logAnalytics": {
             "workspaceId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces', parameters('logAnalyticsWorkspaceName')), '2022-10-01').customerId]",

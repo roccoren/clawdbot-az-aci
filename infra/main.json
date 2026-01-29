@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.40.2.10011",
-      "templateHash": "5258096723609751584"
+      "templateHash": "5077524514158190108"
     }
   },
   "parameters": {
@@ -446,7 +446,10 @@
             "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}{1}', variables('abbrs').resourcesResourceGroups, parameters('environmentName'))), 'Microsoft.Resources/deployments', 'container-registry'), '2025-04-01').outputs.name.value]"
           },
           "containerImage": {
-            "value": "clawdbot:latest"
+            "value": "[format('{0}/clawdbot:latest', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}{1}', variables('abbrs').resourcesResourceGroups, parameters('environmentName'))), 'Microsoft.Resources/deployments', 'container-registry'), '2025-04-01').outputs.loginServer.value)]"
+          },
+          "imageIsFullPath": {
+            "value": true
           },
           "dnsNameLabel": "[if(not(empty(parameters('dnsNameLabel'))), createObject('value', parameters('dnsNameLabel')), createObject('value', format('clawdbot-{0}', variables('resourceToken'))))]",
           "cpu": {
@@ -488,7 +491,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.40.2.10011",
-              "templateHash": "15658430199189077303"
+              "templateHash": "3812316750176142269"
             }
           },
           "parameters": {
@@ -507,6 +510,13 @@
               "type": "string",
               "metadata": {
                 "description": "Container image to deploy"
+              }
+            },
+            "imageIsFullPath": {
+              "type": "bool",
+              "defaultValue": false,
+              "metadata": {
+                "description": "Container image is provided as a fully qualified reference"
               }
             },
             "containerRegistryName": {
@@ -574,7 +584,7 @@
                   {
                     "name": "clawdbot",
                     "properties": {
-                      "image": "[format('{0}/{1}', reference(resourceId('Microsoft.ContainerRegistry/registries', parameters('containerRegistryName')), '2023-01-01-preview').loginServer, parameters('containerImage'))]",
+                      "image": "[if(parameters('imageIsFullPath'), parameters('containerImage'), format('{0}/{1}', reference(resourceId('Microsoft.ContainerRegistry/registries', parameters('containerRegistryName')), '2023-01-01-preview').loginServer, parameters('containerImage')))]",
                       "ports": [
                         {
                           "port": "[parameters('port')]",
