@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.40.2.10011",
-      "templateHash": "13300490593912688618"
+      "templateHash": "5077524514158190108"
     }
   },
   "parameters": {
@@ -491,7 +491,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.40.2.10011",
-              "templateHash": "17523534674026105441"
+              "templateHash": "3812316750176142269"
             }
           },
           "parameters": {
@@ -613,7 +613,13 @@
                   ],
                   "dnsNameLabel": "[parameters('dnsNameLabel')]"
                 },
-                "imageRegistryCredentials": "[if(parameters('imageIsFullPath'), createArray(), createArray(createObject('server', reference(resourceId('Microsoft.ContainerRegistry/registries', parameters('containerRegistryName')), '2023-01-01-preview').loginServer, 'username', listCredentials(resourceId('Microsoft.ContainerRegistry/registries', parameters('containerRegistryName')), '2023-01-01-preview').username, 'password', listCredentials(resourceId('Microsoft.ContainerRegistry/registries', parameters('containerRegistryName')), '2023-01-01-preview').passwords[0].value)))]",
+                "imageRegistryCredentials": [
+                  {
+                    "server": "[reference(resourceId('Microsoft.ContainerRegistry/registries', parameters('containerRegistryName')), '2023-01-01-preview').loginServer]",
+                    "username": "[listCredentials(resourceId('Microsoft.ContainerRegistry/registries', parameters('containerRegistryName')), '2023-01-01-preview').username]",
+                    "password": "[listCredentials(resourceId('Microsoft.ContainerRegistry/registries', parameters('containerRegistryName')), '2023-01-01-preview').passwords[0].value]"
+                  }
+                ],
                 "diagnostics": {
                   "logAnalytics": {
                     "workspaceId": "[parameters('logAnalyticsWorkspaceId')]",

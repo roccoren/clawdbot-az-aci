@@ -76,7 +76,7 @@ resource containerGroup 'Microsoft.ContainerInstance/containerGroups@2023-05-01'
       ]
       dnsNameLabel: dnsNameLabel
     }
-    imageRegistryCredentials: imageIsFullPath ? [] : [
+    imageRegistryCredentials: [
       {
         server: containerRegistry.properties.loginServer
         username: containerRegistry.listCredentials().username
