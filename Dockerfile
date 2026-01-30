@@ -26,9 +26,9 @@ EXPOSE 18789
 # Switch to non-root user
 USER node
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-    CMD curl -f http://localhost:18789/ || exit 1
+# Health check - use /health endpoint
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost:18789/health || exit 1
 
 # Start clawdbot gateway
 CMD ["clawdbot", "gateway"]

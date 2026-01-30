@@ -27,7 +27,7 @@
       "type": "string",
       "defaultValue": "ghcr.io/roccoren/clawdbot-az-aci:latest",
       "metadata": {
-        "description": "Container image to deploy"
+        "description": "Container image to deploy. Default uses the pre-built image from this repository."
       }
     },
     "registryServer": {
@@ -86,9 +86,9 @@
     },
     "clawdbotGatewayToken": {
       "type": "securestring",
-      "defaultValue": "[uniqueString(resourceGroup().id, utcNow())]",
+      "defaultValue": "[concat(uniqueString(resourceGroup().id, utcNow()), uniqueString(subscription().subscriptionId, utcNow()), uniqueString(deployment().name, utcNow()))]",
       "metadata": {
-        "description": "Gateway token for Clawdbot authentication (auto-generated if not provided)"
+        "description": "Gateway token for Clawdbot authentication. IMPORTANT: Write this down before deploying! If left empty, a random token is generated (39 chars)."
       }
     },
     "logAnalyticsWorkspaceName": {
@@ -202,11 +202,11 @@
       "type": "string",
       "value": "[reference(resourceId('Microsoft.ContainerInstance/containerGroups', parameters('containerGroupName'))).ipAddress.fqdn]"
     },
-    "gatewayToken": {
+    "gatewayTokenNote": {
       "type": "string",
-      "value": "[parameters('clawdbotGatewayToken')]",
+      "value": "Gateway token was provided as a parameter. If auto-generated, retrieve it from Key Vault or redeploy with a known token.",
       "metadata": {
-        "description": "IMPORTANT: Save this gateway token securely. You will need it to access Clawdbot."
+        "description": "Security note about gateway token"
       }
     }
   }

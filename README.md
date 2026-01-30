@@ -33,12 +33,17 @@ Click the "Deploy to Azure" button above to deploy Clawdbot directly from the Az
 
 1. Open the Azure Portal deployment page
 2. Prompt you to enter your API keys (at least one required: OpenAI or Anthropic)
-3. Create all necessary Azure resources:
+3. **Enter a gateway token** - This is your password to access Clawdbot. **Save it before clicking Create!**
+4. Create all necessary Azure resources:
    - Azure Container Instance (running Clawdbot)
    - Log Analytics Workspace for monitoring
-4. Deploy and start Clawdbot automatically
+5. Deploy and start Clawdbot automatically
 
-**Note**: The one-click deployment uses the pre-built Clawdbot image from GitHub Container Registry. A gateway token will be auto-generated for security. **Important**: After deployment completes, copy the gateway token from the deployment outputs - you'll need it to access Clawdbot.
+**Important Notes**:
+- The one-click deployment uses the pre-built image from `ghcr.io/roccoren/clawdbot-az-aci:latest`
+- **Write down your gateway token before deploying** - it won't be shown in outputs for security
+- If you leave the token field empty, a random one is generated (you'll need to redeploy with a known token)
+- First-time setup: ensure the GitHub Actions workflow has run and the package is set to public (see [Setup](#first-time-setup))
 
 ### Option 2: Deploy via Azure Developer CLI
 
@@ -289,9 +294,18 @@ For production deployments, strongly consider implementing VNet integration or p
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
+## First-Time Setup
+
+If you're forking or cloning this repository, you need to:
+
+1. **Run the GitHub Actions workflow** - Push to main branch or manually trigger the workflow to build the Docker image
+2. **Make the package public** - Go to your GitHub repo → Packages → clawdbot-az-aci → Package settings → Change visibility to Public
+
+Without this, the 1-click deploy button will fail because Azure can't pull private GHCR images without credentials.
+
 ## Resources
 
-- [Clawdbot Documentation](https://docs.molt.bot/)
+- [Clawdbot Documentation](https://docs.clawd.bot/)
 - [Azure Developer CLI Documentation](https://learn.microsoft.com/azure/developer/azure-developer-cli/)
 - [Azure Container Instances Documentation](https://learn.microsoft.com/azure/container-instances/)
 - [Azure Bicep Documentation](https://learn.microsoft.com/azure/azure-resource-manager/bicep/)
